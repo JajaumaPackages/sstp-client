@@ -15,6 +15,7 @@ BuildRequires:  libevent-devel
 BuildRequires:  libtool
 BuildRequires:  openssl-devel
 BuildRequires:  pkgconfig
+BuildRequires:  ppp
 BuildRequires:  ppp-devel
 Requires(pre):  shadow-utils
 
