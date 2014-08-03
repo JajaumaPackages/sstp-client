@@ -34,8 +34,9 @@ developing applications that use %{name}.
 %setup -q
 
 %build
-%configure --disable-static       \
-           --disable-silent-rules \
+%configure --disable-static                                        \
+           --disable-silent-rules                                  \
+           --with-pppd-plugin-dir="%{_libdir}/pppd/%{ppp_version}" \
            --with-runtime-dir="%{_localstatedir}/run/sstpc"
 
 # Get rid of RPATH
@@ -53,7 +54,7 @@ sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
 # Use %%doc to handle documentation.
 rm -frv %{buildroot}%{_docdir}
 
-find %{buildroot} -name '*.la' -exec -delete -print
+find %{buildroot} -name '*.la' -delete -print
 
 %pre
 getent group sstpc >/dev/null || groupadd -r sstpc
