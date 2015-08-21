@@ -1,31 +1,45 @@
 %global _hardened_build 1
-
 %global __provides_exclude ^sstp-pppd-plugin\\.so$
-
-%global ppp_version %(rpm -q ppp --queryformat '%{VERSION}')
+%global ppp_version %(rpm -q ppp > /dev/null && rpm -q ppp --qf '%{VERSION}' || exit 1)
+%global commonname sstpc
 
 Name:           sstp-client
-Version:        1.0.9
-Release:        8%{?dist}
-Summary:        Secure Socket Tunneling Protocol (SSTP) Client
+Version:        1.0.10
+Release:        1%{?dist}
+Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
 Source0:        http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.gz
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  libevent-devel
 BuildRequires:  libtool
 BuildRequires:  openssl-devel
-BuildRequires:  pkgconfig
 BuildRequires:  ppp
 BuildRequires:  ppp-devel
 Requires(pre):  shadow-utils
+# PPP bumps location of the libraries with every new release, I can't promise
+# the code is 100% compatible with new ppp always, so hardcode the version
+# and manually rebuild after every new ppp package in Fedora.
+Requires:       ppp = %{ppp_version}-%{release}
 
 %description
-This is a client for the Secure Socket Tunneling Protocol, SSTP. It can be 
+This is a client for the Secure Socket Tunneling Protocol(SSTP). It can be 
 used to establish a SSTP connection to a Windows Server.
+
+Features:
+* Establish a SSTP connection to a remote Windows 2k8 server.
+* Async PPP support.
+* Similar command line handling as pptp-client for easy integration with 
+pon/poff scripts.
+* Basic HTTP Proxy support.
+* Certficate handling and verification.
+* IPv6 support.
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       ppp-devel%{?_isa} = %{ppp_version}-%{release}
 
 %description    devel
 This package contains libraries and header files for
@@ -35,17 +49,14 @@ developing applications that use %{name}.
 %setup -q
 
 %build
-%configure --disable-static                                        \
-           --disable-silent-rules                                  \
-           --with-pppd-plugin-dir="%{_libdir}/pppd/%{ppp_version}" \
-           --with-runtime-dir="%{_localstatedir}/run/sstpc"
-
-# Get rid of RPATH
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-
-# Get rid of redundant linking
-sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
+autoreconf -fiv
+%configure --disable-static                                          \
+           --disable-silent-rules                                    \
+           --with-libevent=2                                         \
+           --with-pppd-plugin-dir="%{_libdir}/pppd/%{ppp_version}"   \
+           --with-runtime-dir="%{_localstatedir}/run/%{commonname}"  \
+           --enable-user=yes                                         \
+           --enable-group=yes
 
 %make_build
 
@@ -57,23 +68,27 @@ rm -frv %{buildroot}%{_docdir}
 
 find %{buildroot} -name '*.la' -delete -print
 
+%check
+make check
+
 %pre
-getent group sstpc >/dev/null || groupadd -r sstpc
-getent passwd sstpc >/dev/null || \
-    useradd -r -g sstpc \
-    -d %{_localstatedir}/run/sstpc \
+getent group %{commonname} >/dev/null || groupadd -r %{commonname}
+getent passwd %{commonname} >/dev/null || \
+    useradd -r -g %{commonname} \
+    -d %{_localstatedir}/run/%{commonname} \
     -s /sbin/nologin \
-    -c "Secure Socket Tunneling Protocol (SSTP) Client" sstpc
+    -c "Secure Socket Tunneling Protocol(SSTP) Client" %{commonname}
 exit 0
 
 %post -p /sbin/ldconfig
 
 %postun
 /sbin/ldconfig -p
-rm -rf %{_localstatedir}/run/sstpc
+rm -rf %{_localstatedir}/run/%{commonname}
 
 %files
-%doc AUTHORS ChangeLog COPYING README TODO USING *.example
+%doc AUTHORS README debian/changelog TODO USING *.example
+%license COPYING
 %{_sbindir}/sstpc
 %{_libdir}/libsstp_api-0.so
 %{_libdir}/pppd/%{ppp_version}/sstp-pppd-plugin.so
@@ -85,6 +100,9 @@ rm -rf %{_localstatedir}/run/sstpc
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Sat Jun 20 2015 Christopher Meng <rpm@cicku.me> - 1.0.10-1
+- Update to 1.0.10
+
 * Fri Jun 19 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.9-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
