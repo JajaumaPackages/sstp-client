@@ -1,6 +1,8 @@
 %global _hardened_build 1
 %global __provides_exclude ^sstp-pppd-plugin\\.so$
+%global ppp_epoch %(rpm -q ppp > /dev/null && rpm -q ppp --qf '%{EPOCH}' || exit 1)
 %global ppp_version %(rpm -q ppp > /dev/null && rpm -q ppp --qf '%{VERSION}' || exit 1)
+%global ppp_release %(rpm -q ppp > /dev/null && rpm -q ppp --qf '%{RELEASE}' || exit 1)
 %global commonname sstpc
 
 Name:           sstp-client
@@ -10,10 +12,7 @@ Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
 Source0:        http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.gz
-BuildRequires:  autoconf
-BuildRequires:  automake
 BuildRequires:  libevent-devel
-BuildRequires:  libtool
 BuildRequires:  openssl-devel
 BuildRequires:  ppp
 BuildRequires:  ppp-devel
@@ -21,7 +20,7 @@ Requires(pre):  shadow-utils
 # PPP bumps location of the libraries with every new release, I can't promise
 # the code is 100% compatible with new ppp always, so hardcode the version
 # and manually rebuild after every new ppp package in Fedora.
-Requires:       ppp = %{ppp_version}-%{release}
+Requires:       ppp = %{ppp_epoch}:%{ppp_version}-%{ppp_release}
 
 %description
 This is a client for the Secure Socket Tunneling Protocol(SSTP). It can be 
@@ -39,7 +38,7 @@ pon/poff scripts.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       ppp-devel%{?_isa} = %{ppp_version}-%{release}
+Requires:       ppp-devel%{?_isa} = %{ppp_epoch}:%{ppp_version}-%{ppp_release}
 
 %description    devel
 This package contains libraries and header files for
@@ -49,7 +48,6 @@ developing applications that use %{name}.
 %setup -q
 
 %build
-autoreconf -fiv
 %configure --disable-static                                          \
            --disable-silent-rules                                    \
            --with-libevent=2                                         \
