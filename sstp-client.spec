@@ -7,7 +7,7 @@
 
 Name:           sstp-client
 Version:        1.0.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
@@ -20,7 +20,7 @@ Requires(pre):  shadow-utils
 # PPP bumps location of the libraries with every new release, I can't promise
 # the code is 100% compatible with new ppp always, so hardcode the version
 # and manually rebuild after every new ppp package in Fedora.
-Requires:       ppp = %{ppp_epoch}:%{ppp_version}-%{ppp_release}
+Requires:       ppp = %{ppp_version}-%{ppp_release}
 
 %description
 This is a client for the Secure Socket Tunneling Protocol(SSTP). It can be 
@@ -38,7 +38,7 @@ pon/poff scripts.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       ppp-devel%{?_isa} = %{ppp_epoch}:%{ppp_version}-%{ppp_release}
+Requires:       ppp-devel%{?_isa} = %{ppp_version}-%{ppp_release}
 
 %description    devel
 This package contains libraries and header files for
@@ -98,6 +98,9 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Thu Aug 27 2015 Christopher Meng <i@cicku.me> - 1.0.10-2
+- Correct ppp dependency.
+
 * Sat Jun 20 2015 Christopher Meng <rpm@cicku.me> - 1.0.10-1
 - Update to 1.0.10
 
