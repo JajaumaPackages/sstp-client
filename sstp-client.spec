@@ -7,7 +7,7 @@
 
 Name:           sstp-client
 Version:        1.0.10
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
@@ -55,6 +55,8 @@ developing applications that use %{name}.
            --with-runtime-dir="%{_localstatedir}/run/%{commonname}"  \
            --enable-user=yes                                         \
            --enable-group=yes
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %make_build
 
@@ -93,11 +95,15 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_mandir}/man8/sstpc.8*
 
 %files devel
+%doc DEVELOPERS
 %{_includedir}/sstp-client/
 %{_libdir}/libsstp_api.so
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Thu Jul 21 2016 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 1.0.10-5
+- Workaround for problem with Rpath
+
 * Fri Feb 19 2016 Tomas Hozza <thozza@redhat.com> - 1.0.10-4
 - Rebuild against new ppp package version
 
