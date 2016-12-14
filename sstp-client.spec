@@ -83,7 +83,7 @@ exit 0
 %post -p /sbin/ldconfig
 
 %postun
-/sbin/ldconfig -p
+/sbin/ldconfig
 rm -rf %{_localstatedir}/run/%{commonname}
 
 %files
@@ -101,6 +101,9 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Wed Dec 14 2016 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 1.0.10-6
+- Fix ldconfig call in postun - #1404802
+
 * Thu Jul 21 2016 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 1.0.10-5
 - Workaround for problem with Rpath
 
