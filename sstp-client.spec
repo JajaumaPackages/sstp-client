@@ -7,7 +7,7 @@
 
 Name:           sstp-client
 Version:        1.0.10
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
