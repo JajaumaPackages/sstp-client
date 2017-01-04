@@ -6,8 +6,8 @@
 %global commonname sstpc
 
 Name:           sstp-client
-Version:        1.0.10
-Release:        6%{?dist}
+Version:        1.0.11
+Release:        1%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
@@ -101,6 +101,9 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Wed Dec 14 2016 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 1.0.11-1
+- Update to 1.0.11 which is compatible with OpenSSL 1.1.0c
+
 * Wed Dec 14 2016 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 1.0.10-6
 - Fix ldconfig call in postun - #1404802
 
