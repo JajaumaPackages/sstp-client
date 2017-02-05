@@ -7,7 +7,7 @@
 
 Name:           sstp-client
 Version:        1.0.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
@@ -101,6 +101,9 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Sun Feb 05 2017 Kalev Lember <klember@redhat.com> - 1.0.11-2
+- Rebuilt for new ppp
+
 * Wed Dec 14 2016 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 1.0.11-1
 - Update to 1.0.11 which is compatible with OpenSSL 1.1.0c
 
