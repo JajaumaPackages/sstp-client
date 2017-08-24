@@ -1,6 +1,6 @@
 %global _hardened_build 1
 %global __provides_exclude ^sstp-pppd-plugin\\.so$
-%global ppp_version %(rpm -q ppp > /dev/null && rpm -q ppp --qf '%{VERSION}' || exit 1)
+%global ppp_version %(rpm -q ppp > /dev/null && rpm -q ppp --qf '%{VERSION}' || echo 'broken')
 %global commonname sstpc
 
 Name:           sstp-client
