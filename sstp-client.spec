@@ -5,7 +5,7 @@
 
 Name:           sstp-client
 Version:        1.0.11
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
@@ -97,6 +97,9 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Wed Feb 14 2018 Kevin Fenzi <kevin@scrye.com> - 1.0.11-10
+- Rebuild for new libevent
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.11-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
