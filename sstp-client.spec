@@ -10,6 +10,7 @@ Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
 Source0:        http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.gz
+BuildRequires:  gcc
 BuildRequires:  libevent-devel
 BuildRequires:  openssl-devel
 BuildRequires:  ppp
