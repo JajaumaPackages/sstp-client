@@ -4,12 +4,12 @@
 %global commonname sstpc
 
 Name:           sstp-client
-Version:        1.0.11
-Release:        11%{?dist}
+Version:        1.0.12
+Release:        1%{?dist}
 Summary:        Secure Socket Tunneling Protocol(SSTP) Client
 License:        GPLv2+
 Url:            http://sstp-client.sourceforge.net
-Source0:        http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/sstp-client/sstp-client/sstp-client-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  libevent-devel
 BuildRequires:  openssl-devel
@@ -84,7 +84,7 @@ exit 0
 rm -rf %{_localstatedir}/run/%{commonname}
 
 %files
-%doc AUTHORS README debian/changelog TODO USING *.example
+%doc AUTHORS README TODO USING *.example
 %license COPYING
 %{_sbindir}/sstpc
 %{_libdir}/libsstp_api-0.so
@@ -98,6 +98,10 @@ rm -rf %{_localstatedir}/run/%{commonname}
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog
+* Wed Jul 25 2018 Jajauma's Packages <jajauma@yandex.ru> - 1.0.12-1
+- Update to 1.0.12
+- Fix download URL
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.11-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
